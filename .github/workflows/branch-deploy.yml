@@ -35,7 +35,6 @@ jobs:
           branch_name: ${{ inputs.branch-name }}
           database: main
           username: ${{ inputs.neon-username }}
-          password: ${{ inputs.neon-password }}
           prisma: true
           api_key: ${{ secrets.NEON_API_KEY }}
       - run: echo db_url ${{ steps.create-branch.outputs.db_url }}
