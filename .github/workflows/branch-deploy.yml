@@ -26,7 +26,7 @@ on:
 
 jobs:
   setup-database:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     steps:
       - name: Sets up a branch on Neon
         uses: neondatabase/create-branch-action@v5
