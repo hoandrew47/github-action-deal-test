@@ -1,0 +1,43 @@
+name: Branch Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+       # this will default for now but needs to be changed
+      branch-name:
+        description: 'Branch to deploy'
+        required: true
+        type: string
+        default: 'branch-review'
+      neon-username:
+        description: 'Neon username'
+        required: true
+        type: string
+        default: 'andrew-neon'
+      neon-password:
+        description: 'Neon password'
+        required: true
+        type: string
+        default: 'x7riE6TnSpkK'
+  #  push:
+  #  tags:
+        # - 'branch-review/**'
+       
+
+jobs:
+  setup-database:
+    runs-on: [self-hosted]
+    steps:
+      - name: Sets up a branch on Neon
+        uses: neondatabase/create-branch-action@v5
+        with:
+          project_id: ${{ secrets.NEON_BRANCH_PROJECT_ID }}
+          branch_name: ${{ inputs.branch-name }}
+          database: main
+          username: ${{ inputs.neon-username }}
+          password: ${{ inputs.neon-password }}
+          prisma: true
+          api_key: ${{ secrets.NEON_API_KEY }}
+      - run: echo db_url ${{ steps.create-branch.outputs.db_url }}
+      - run: echo host ${{ steps.create-branch.outputs.host }}
+      - run: echo branch_id ${{ steps.create-branch.outputs.branch_id }}
