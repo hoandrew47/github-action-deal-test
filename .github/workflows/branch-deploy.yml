@@ -12,10 +12,8 @@ on:
         description: 'Neon username'
         required: true
         type: string
-      neon-password:
-        description: 'Neon password'
-        required: true
-        type: string
+        default: db_user_for_url
+      
 
 jobs:
   setup-database:
