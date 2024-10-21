@@ -25,7 +25,7 @@ jobs:
         with:
           project_id: ${{ secrets.NEON_BRANCH_PROJECT_ID }}
           branch_name: ${{ github.event.inputs.branch-name }}
-          database: main
+          database: neondb
           username: ${{ github.event.inputs.neon-username }}
           prisma: true
           api_key: ${{ secrets.NEON_API_KEY }}
