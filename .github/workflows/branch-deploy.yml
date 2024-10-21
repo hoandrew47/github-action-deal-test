@@ -33,17 +33,26 @@ jobs:
         run: echo "Host ${{ steps.create-branch.outputs.host }}"
       - name: Echo Branch ID
         run: echo "Branch ID ${{ steps.create-branch.outputs.branch_id }}"
+  
 
+  setup-heroku:
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup Heroku CLI
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "dealstack-be-test-deploy" # Replace with your Heroku app's name
-          heroku_email: "andrew.ho@dealstack.io" # Replace with your Heroku account email
-          usedocker: true # Optional: Set this to true if you are deploying a Docker container
+          heroku_app_name: "dealstack-be-test-deploy"  # Replace with your Heroku app's name
+          heroku_email: "andrew.ho@dealstack.io"  # Replace with your Heroku account email
+          usedocker: true  # Optional: Set this to true if you are deploying a Docker container
 
+  run-heroku:
+    needs: setup-heroku
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to Heroku
         run: |
           heroku container:login
-          heroku container:push web -a your-heroku-app-name
-          heroku container:release web -a your-heroku-app-name
+          heroku container:push web -a dealstack-be-test-deploy
+          heroku container:release web -a dealstack-be-test-deploy
+
