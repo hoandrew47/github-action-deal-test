@@ -38,6 +38,8 @@ jobs:
   setup-heroku:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
       - name: Setup Heroku CLI
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
