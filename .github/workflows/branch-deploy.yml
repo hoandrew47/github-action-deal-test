@@ -12,7 +12,7 @@ on:
         description: 'Neon username'
         required: true
         type: string
-        default: db_user_for_url
+        default: neondb_owner
       
 
 jobs:
