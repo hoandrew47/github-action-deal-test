@@ -21,7 +21,7 @@ jobs:
   setup-database:
     runs-on: ubuntu-latest
     steps:
-      - name: Sets up a branch on Neon
+      - name: Create Neon Database Branch
         uses: neondatabase/create-branch-action@v5
         id: create-branch
         with:
@@ -29,9 +29,14 @@ jobs:
           branch_name: ${{ github.event.inputs.branch-name }}
           database: main
           username: ${{ github.event.inputs.neon-username }}
-          password: ${{ github.event.inputs.neon-password }}
           prisma: true
           api_key: ${{ secrets.NEON_API_KEY }}
-      - run: echo "Database URL: ${{ steps.create-branch.outputs.db_url }}"
-      - run: echo "Host: ${{ steps.create-branch.outputs.host }}"
-      - run: echo "Branch ID: ${{ steps.create-branch.outputs.branch_id }}"
+      
+      - name: Echo Database URL
+        run: echo "Database URL ${{ steps.create-branch.outputs.db_url }}"
+      
+      - name: Echo Host
+        run: echo "Host ${{ steps.create-branch.outputs.host }}"
+      
+      - name: Echo Branch ID
+        run: echo "Branch ID ${{ steps.create-branch.outputs.branch_id }}"
