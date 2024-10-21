@@ -26,10 +26,10 @@ jobs:
         id: create-branch
         with:
           project_id: ${{ secrets.NEON_BRANCH_PROJECT_ID }}
-          branch_name: ${{ inputs.branch-name }}
+          branch_name: ${{ github.event.inputs.branch-name }}
           database: main
-          username: ${{ inputs.neon-username }}
-          password: ${{ inputs.neon-password }}
+          username: ${{ github.event.inputs.neon-username }}
+          password: ${{ github.event.inputs.neon-password }}
           prisma: true
           api_key: ${{ secrets.NEON_API_KEY }}
       - run: echo "Database URL: ${{ steps.create-branch.outputs.db_url }}"
