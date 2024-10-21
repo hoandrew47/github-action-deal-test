@@ -34,20 +34,16 @@ jobs:
       - name: Echo Branch ID
         run: echo "Branch ID ${{ steps.create-branch.outputs.branch_id }}"
 
-  set-up-redis:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create a Redis DB
-        id: create-redis
-        uses: bitovi/github-actions-deploy-redis-db@v0.1.1
+      - name: Setup Heroku CLI
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: eu-west-2
-          aws_redis_enable: true
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "dealstack-be-test-deploy" # Replace with your Heroku app's name
+          heroku_email: "andrew.ho@dealstack.io" # Replace with your Heroku account email
+          usedocker: true # Optional: Set this to true if you are deploying a Docker container
 
-      - name: Echo Completion
-        run: echo "Redis DB creation completed successfully!"
-
-      - name: Echo Redis Connection String Secret
-        run: echo "Redis Connection String Secret ${{ steps.create-redis.outputs.redis_connection_string_secret }}"
+      - name: Deploy to Heroku
+        run: |
+          heroku container:login
+          heroku container:push web -a your-heroku-app-name
+          heroku container:release web -a your-heroku-app-name
