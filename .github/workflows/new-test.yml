@@ -7,7 +7,6 @@ on:
         required: true
         type: string
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,20 +28,20 @@ jobs:
         run: echo "Deploying to environment: ${{ env.environment }}"
 
       - name: Approval for Production Deployment
-        if: env.environment == 'production'
+        if: ${{ env.environment == 'production' }}
         environment: 
           name: production
         run: echo "Waiting for manual approval to deploy to Production"
         # This step will pause the workflow until manual approval is granted in the "production" environment
 
       - name: Deploy to Production
-        if: env.environment == 'production'
+        if: ${{ env.environment == 'production' }}
         run: |
           echo "Deploying to Production"
           # Add production deployment commands here
 
       - name: Deploy to Staging
-        if: env.environment != 'production'
+        if: ${{ env.environment != 'production' }}
         environment: 
           name: staging
         run: |
