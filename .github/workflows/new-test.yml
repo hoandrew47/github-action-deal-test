@@ -1,1 +1,53 @@
+name: Branch Deploy
 
+on:
+  workflow_dispatch:
+    inputs:
+      branch-name:
+        description: 'Branch to deploy'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo Hello
+        run: echo "Hello"
+
+      - name: Set Deployment Environment
+        id: set-env
+        run: |
+          if [[ "${{ github.event.inputs.branch-name }}" == "production" ]]; then
+            echo "environment=production" >> $GITHUB_ENV
+          else
+            echo "environment=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Echo Deployment Environment
+        run: echo "Deploying to environment: ${{ env.environment }}"
+
+      - name: Approval for Production Deployment
+        if: env.environment == 'production'
+        environment: 
+          name: production
+        run: echo "Waiting for manual approval to deploy to Production"
+        # This step will pause the workflow until manual approval is granted in the "production" environment
+
+      - name: Deploy to Production
+        if: env.environment == 'production'
+        run: |
+          echo "Deploying to Production"
+          # Add production deployment commands here
+
+      - name: Deploy to Staging
+        if: env.environment != 'production'
+        environment: 
+          name: staging
+        run: |
+          echo "Deploying to Staging"
+          # Add staging deployment commands here
+
+      - name: Echo Finished
+        run: echo "Finished"
