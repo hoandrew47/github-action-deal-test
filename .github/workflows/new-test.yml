@@ -31,6 +31,8 @@ jobs:
   approval:
     name: Approval for Production Deployment
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Manual Approval Step
         uses: trstringer/manual-approval@v1
