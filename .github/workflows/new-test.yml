@@ -1,5 +1,4 @@
-name: Branch Deploy
-
+name: Test Deploy
 on:
   workflow_dispatch:
     inputs:
