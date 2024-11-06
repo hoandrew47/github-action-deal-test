@@ -34,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: set_env
     environment:
-      name: ${{ steps.set_env.outputs.environment }}
+      name: production
       # Configure required reviewers for 'production' if applicable
     steps:
       - name: Await Approval
-        run: echo "Awaiting manual approval to deploy." ${{ steps.set_env.outputs.environment }}
+        run: echo "Awaiting manual approval to deploy."
 
   deploy_production:
     name: Deploy to Production
