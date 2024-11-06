@@ -26,7 +26,7 @@ jobs:
       - name: Set Deployment Environment
         id: set_env
         run: echo "environment=production" >> $GITHUB_ENV
-            echo "environment=production" >> $GITHUB_OUTPUT
+           
          
 
   approval:
@@ -34,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: set_env
     environment:
-      name: ${{ needs.set_env.outputs.environment }}
+      name: ${{ steps.set_env.outputs.environment }}
       # Configure required reviewers for 'production' if applicable
     steps:
       - name: Await Approval
-        run: echo "Awaiting manual approval to deploy."
+        run: echo "Awaiting manual approval to deploy." ${{ steps.set_env.outputs.environment }}
 
   deploy_production:
     name: Deploy to Production
