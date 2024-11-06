@@ -38,7 +38,7 @@ jobs:
       # Configure required reviewers for 'production' if applicable
     steps:
       - name: Await Approval
-        run: echo "Awaiting manual approval to deploy to ${{ needs.set_env.outputs.environment | title }}."
+        run: echo "Awaiting manual approval to deploy."
 
   deploy_production:
     name: Deploy to Production
