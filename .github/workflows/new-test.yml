@@ -15,26 +15,14 @@ jobs:
     steps:
       - name: Echo Hello
         run: echo "Hello"
-
-  set_env:
-    name: Set Deployment Environment
-    runs-on: ubuntu-latest
-    needs: echo_hello
-    outputs:
-      environment: ${{ steps.set_env.outputs.environment }}
-    steps:
-      - name: Set Deployment Environment
-        id: set_env
-        run: echo "environment=production" >> $GITHUB_ENV
-           
          
 
   approval:
     name: Approval for Production Deployment
     runs-on: ubuntu-latest
-    needs: set_env
+    needs: echo_hello
     environment:
-      name: production
+      name: ${{  branch-name  }}
       # Configure required reviewers for 'production' if applicable
     steps:
       - name: Await Approval
@@ -44,7 +32,7 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     needs: approval
-    if: ${{ needs.set_env.outputs.environment == 'production' }}
+    if: ${{ branch-name == 'production' }}
     steps:
       - name: Deploy to Production
         run: |
