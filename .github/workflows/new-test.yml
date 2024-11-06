@@ -17,19 +17,11 @@ jobs:
 
       - name: Set Deployment Environment
         id: set-env
-        run: |
-          if [[ "${{ github.event.inputs.branch-name }}" == "production" ]]; then
-            echo "environment=production" >> $GITHUB_ENV
-          else
-            echo "environment=staging" >> $GITHUB_ENV
-          fi
-
-      - name: Echo Deployment Environment
-        run: echo "Deploying to environment: ${{ env.environment }}"
+        run: echo "environment=production" >> $GITHUB_ENV
 
       - name: Approval for Production Deployment
         if: ${{ env.environment == 'production' }}
-        environment: 
+        env: 
           name: production
         run: echo "Waiting for manual approval to deploy to Production"
         # This step will pause the workflow until manual approval is granted in the "production" environment
@@ -42,8 +34,6 @@ jobs:
 
       - name: Deploy to Staging
         if: ${{ env.environment != 'production' }}
-        environment: 
-          name: staging
         run: |
           echo "Deploying to Staging"
           # Add staging deployment commands here
