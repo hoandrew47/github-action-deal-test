@@ -1,4 +1,5 @@
 name: Test Deploy
+
 on:
   workflow_dispatch:
     inputs:
@@ -8,35 +9,63 @@ on:
         type: string
 
 jobs:
-  deploy:
+  echo_hello:
+    name: Echo Hello
     runs-on: ubuntu-latest
-
     steps:
       - name: Echo Hello
         run: echo "Hello"
 
+  set_env:
+    name: Set Deployment Environment
+    runs-on: ubuntu-latest
+    needs: echo_hello
+    outputs:
+      environment: ${{ steps.set_env.outputs.environment }}
+    steps:
       - name: Set Deployment Environment
-        id: set-env
+        id: set_env
         run: echo "environment=production" >> $GITHUB_ENV
+            echo "environment=production" >> $GITHUB_OUTPUT
+         
 
-      - name: Approval for Production Deployment
-        if: ${{ env.environment == 'production' }}
-        env: 
-          name: production
-        run: echo "Waiting for manual approval to deploy to Production"
-        # This step will pause the workflow until manual approval is granted in the "production" environment
+  approval:
+    name: Approval for Production Deployment
+    runs-on: ubuntu-latest
+    needs: set_env
+    environment:
+      name: ${{ needs.set_env.outputs.environment }}
+      # Configure required reviewers for 'production' if applicable
+    steps:
+      - name: Await Approval
+        run: echo "Awaiting manual approval to deploy to ${{ needs.set_env.outputs.environment | title }}."
 
+  deploy_production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: approval
+    if: ${{ needs.set_env.outputs.environment == 'production' }}
+    steps:
       - name: Deploy to Production
-        if: ${{ env.environment == 'production' }}
         run: |
           echo "Deploying to Production"
-          # Add production deployment commands here
+          # Add your production deployment commands here
 
+  deploy_staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: approval
+    if: ${{ needs.set_env.outputs.environment == 'staging' }}
+    steps:
       - name: Deploy to Staging
-        if: ${{ env.environment != 'production' }}
         run: |
           echo "Deploying to Staging"
-          # Add staging deployment commands here
+          # Add your staging deployment commands here
 
+  echo_finished:
+    name: Echo Finished
+    runs-on: ubuntu-latest
+    needs: [deploy_production, deploy_staging]
+    steps:
       - name: Echo Finished
         run: echo "Finished"
